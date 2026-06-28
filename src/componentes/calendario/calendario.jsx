@@ -156,9 +156,9 @@ export default function Calendario(){
                 <tr>
                     <th colSpan={7}>
                         <div style={{position: "relative", display: "flex", justifyContent: "center"}}>
-                            <button className="btnL" onClick={() => {trocarMes("retroceder")}}>{"<"}</button>
+                            <button className="btnL" onClick={() => {trocarMes("retroceder")}}>{"<<"}</button>
                             {`${nomesMesesPT[Number(mesMudar)-1]} - ${anoS}`}
-                            <button className="btnR" onClick={() => {trocarMes("avancar")}}>{">"}</button>
+                            <button className="btnR" onClick={() => {trocarMes("avancar")}}>{">>"}</button>
                         </div>
                     </th>
                 </tr>

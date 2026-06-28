@@ -1,11 +1,13 @@
 import styled from "styled-components";
 
 export const Tabela = styled.table`
-    border-collapse: collapse;
+    border-collapse: separate;
     width: 350px;
-
+    border-radius: 10px;
+    border: 1px solid #fff;
+    box-shadow: -5px 6px 10px 1px #444;
     td, th{
-        border: 1px solid #444;
+        text-align: center;
         padding: 1px;
     }
     .corAtual {
@@ -22,19 +24,33 @@ export const Tabela = styled.table`
         right: 0px;
         top: 0px;
         height: 100%;
+        border-top-right-radius: 8px;
+        border: none;
+        cursor: pointer;
+        background-color: transparent;
     }
     .btnL {
         position: absolute;
         left: 0px;
         top: 0px;
         height: 100%;
+        border-top-left-radius: 8px;
+        border: none;
+        cursor: pointer;
+        background-color: transparent;
     }
-    
-    @media only screen and (max-width: 400px){
+
+    .semborda {
+        border: none;
+    }
+
+    @media only screen and (max-width: 500px){
         width: 100%;
     }
     
     @media only screen and (max-width: 800px){
-        width: 400px;
+        table {
+            width: 500px;
+        }
     }
 `; 

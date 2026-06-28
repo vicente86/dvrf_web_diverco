@@ -25,18 +25,23 @@ export function MenssagemModal(bgc = "", titulo = "", contexto = "", ml = 3000){
             const el1 = document.createElement("div")
             const el2 = document.createElement("div")
             const el3 = document.createElement("div")
+            const el4 = document.createElement("progress")
 
             const idgerado = `modalanima${Math.floor(Math.random() * (2000 - 1) + 1)}`
             el1.setAttribute("id", idgerado)
             el1.style.cssText = estiloGeralEl1
             el2.style.cssText = `text-align: center; padding: 5px 0px; font-weight: 600;`
             el3.style.cssText = `text-align: center; padding: 2px; font-weight: 400;`
+            el4.style.cssText = `width: 100%;`
             
             el2.innerText = titulo
             el3.innerText = contexto
+            el4.setAttribute("value", "0")
+            el4.setAttribute("max", `${pInt(maxcont, 1)}`)
 
             el1.appendChild(el2)
             el1.appendChild(el3)
+            el1.appendChild(el4)
 
             contMsMD.appendChild(el1)
 
@@ -51,7 +56,7 @@ export function MenssagemModal(bgc = "", titulo = "", contexto = "", ml = 3000){
                 let progresso = timestamp - start
                 cont ++
             
-                animacao(cont, el1, maxcont)
+                animacao(cont, el1, maxcont, el4)
 
                 if(progresso <= ml){
                     requestAnimationFrame(anima)
@@ -74,18 +79,23 @@ export function MenssagemModal(bgc = "", titulo = "", contexto = "", ml = 3000){
             const el1 = document.createElement("div")
             const el2 = document.createElement("div")
             const el3 = document.createElement("div")
+            const el4 = document.createElement("progress")
 
             const idgerado = `modalanima${Math.floor(Math.random() * (2000 - 1) + 1)}`
             el1.style.cssText = estiloGeralEl1
             el2.style.cssText = `text-align: center; padding: 5px 0px; font-weight: 600;`
             el3.style.cssText = `text-align: center; padding: 2px; font-weight: 400;`
+            el4.style.cssText = `width: 100%;`
             
             el1.setAttribute("id", idgerado)
             el2.innerText = titulo
             el3.innerText = contexto
+            el4.setAttribute("value", "0")
+            el4.setAttribute("max", `${pInt(maxcont, 1)}`)
 
             el1.appendChild(el2)
             el1.appendChild(el3)
+            el1.appendChild(el4)
 
             elPrincipal.appendChild(el1)
 
@@ -100,7 +110,7 @@ export function MenssagemModal(bgc = "", titulo = "", contexto = "", ml = 3000){
                 let progresso = Math.floor(timestamp - start)
                 cont ++
 
-                animacao(cont, el1, maxcont) 
+                animacao(cont, el1, maxcont, el4) 
 
                 if(progresso <= ml){
                     requestAnimationFrame(anima)
@@ -123,7 +133,7 @@ function pInt(max = 0, num = 0){
 }
 
 //
-function animacao(cont, el1, max){
+function animacao(cont, el1, max, el4){
 
     // 0%  10%  11%  14%  18%  80%  100%
     // 182 iterações equivalentes a 3000 milisegundos
@@ -141,4 +151,6 @@ function animacao(cont, el1, max){
     
     //Terceira parte mais ou menos de 80% a 100%
     if(cont >= pInt(max, 0.8)){el1.style.transform = `translateX(${(cont - pInt(max, 0.8))*(15)}px)`;}
+
+    el4.setAttribute("value", `${cont*1.25}`);
 }
