@@ -11,10 +11,12 @@ export const ContainerMenu = styled.div`
     border-bottom-right-radius: 20px; */
     
     div:hover {
-        background-color: orange;
+        box-shadow: 1px 1px 5px #9d9d9d;
         transform: rotate(360deg) scale(1.3);
         transition: all 0.5s ease-in-out;
     }
+    .corativa {background-color: orange;}
+    .corneutra {background-color: none;}
 `;
 
 export const ContainerIcones = styled.div`

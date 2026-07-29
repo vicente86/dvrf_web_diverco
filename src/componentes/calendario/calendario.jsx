@@ -34,15 +34,15 @@ export default function Calendario(){
         
         const arrTotalSemanas = [];
         const objGM = {}       
-        const objFeriado = {};
+        const objFN = {};
         const anoSL = ano !== null? ano : anoS;
         
         try {
             const consultaFeriado = await axios.get(`https://brasilapi.com.br/api/feriados/v1/${anoSL}`);
             
             for (const r of consultaFeriado.data) {
-                objFeriado[`${r.date.replaceAll("-", "_")}`] = r;
-            }
+                objFN[`${r.date.replaceAll("-", "_")}`] = r;
+            }        
 
         } catch (error) {
             
@@ -54,7 +54,7 @@ export default function Calendario(){
             MenssagemModal("amarelo", "NADA ENCONTRADO!", msg, 4000);
         }
         
-        setObjF(objFeriado);
+        setObjF(objFN);
         
         for(let m = 0; m < 12; m++){
             const d = new Date(anoSL, m+1, 0);

@@ -6,6 +6,7 @@ export const Tabela = styled.table`
     border-radius: 10px;
     border: 1px solid #fff;
     box-shadow: -5px 6px 10px 1px #444;
+    
     td, th{
         text-align: center;
         padding: 1px;
