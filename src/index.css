@@ -58,6 +58,7 @@
 
 body {
   margin: 0;
+  position: relative;
 }
 
 #root {
@@ -92,3 +93,30 @@ h2 {
 p {
   margin: 0;
 }
+
+/* ============================== */
+/* #containerSp {
+  width: 100px; 
+  height: 100px; 
+  border-radius: 5px;
+  position: absolute;
+  left: 50%;
+  bottom: 50px;
+  transform: translanteX(-50%);
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .divspinner {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border-left: 5px solid green;
+    animation: spin 2s linear infinite;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+} */
