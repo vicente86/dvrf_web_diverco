@@ -6,11 +6,6 @@ export const ContainerNotaEmPDF = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;    
-    button {
-        padding: 10px 5px;
-        font-size: 12pt;
-        cursor: pointer;
-    }
 `
 
 export const ElementoPDF = styled.div`

@@ -3,9 +3,10 @@ import { criaArray, diasSemanaPT, nomesMesesPT } from "../utils/utilidades";
 import { Tabela } from "./estiloCalendario";
 import axios from "axios";
 import { MenssagemModal } from "../notificacaoMsg/notificacaoMsg";
+import { SlArrowLeftCircle, SlArrowRightCircle } from "react-icons/sl";
 
 
-export default function Calendario(){
+export default function Calendario({tamanho = "none"}){
 
     const [anoS, setAnoS] = useState(new Date().getFullYear());
     const [arrSemanas, setArrSemanas] = useState([]);
@@ -13,11 +14,9 @@ export default function Calendario(){
     const [objF, setObjF] = useState({});
     const dataAtual = new Date().toLocaleDateString().replaceAll("/", "_");
     const [mesMudar, setMesMudar] = useState(`${dataAtual.split("_")[1]}`);
+    const [objEventosC, setObjEventosC] = useState({});
 
-    
-    
-
-    let contadorRender = 0
+    let contadorRender = 0;
     
     useEffect(() => {
         contadorRender == 0 && tabelasMeses()
@@ -148,17 +147,93 @@ export default function Calendario(){
             setMesMudar(res);
         }
     }
+
+
+    // Cria o modal para registrar e salvar/atualizar um evento
+    function criarModal(el, dc){
+        const elBody = document.querySelector("body");
+        if(dc !== undefined){
+            
+            const containerModal = document.createElement("div");
+            const modal = document.createElement("div");
+            const div_fechar = document.createElement("div");
+            const btn_fechar = document.createElement("div");
+            const container_conteudo_modal = document.createElement("div");
+            const entrada_titulo = document.createElement("input");
+            const entrada_conteudo = document.createElement("textarea");
+            const div_botoes = document.createElement("div");
+            const btn_salvar = document.createElement("button");
+            const btn_cancelar = document.createElement("button");
+            
+        
+            btn_salvar.classList.add("btn_salvar_modal_calendario");
+            btn_cancelar.classList.add("btn_cancelar_modal_calendario");
+            btn_fechar.classList.add("btn_fechar_modal_calendario");
+            modal.classList.add("modal_calendario_evento");
+            elBody.style.position = "relative";
+        
+            
+            btn_fechar.classList.add("btn_fechar_modal_calendario");
+            btn_fechar.innerHTML = "&#10007;";
+            containerModal.classList.add("container_modal_calendario_evento");
+            div_fechar.classList.add("fechar_modal_calendario");
+            div_fechar.innerHTML = `Adicionar/atualizar eventos ${dc.split("_")[2]}/${dc.split("_")[1]}/${dc.split("_")[0]}`;
+            entrada_titulo.setAttribute("placeholder", "Título");
+            entrada_titulo.setAttribute("type", "text");
+            entrada_conteudo.setAttribute("placeholder", "Descrição");
+            div_botoes.classList.add("btns_modal");
+            btn_salvar.innerHTML = `Salvar`;
+            btn_cancelar.innerHTML = `Cancelar`;
+            
+            div_botoes.style.cssText = "widht: 100%; display: flex; justify-content: center; align-items: center; gap: 5px;";
+            
+            container_conteudo_modal.classList.add("container_modal_conteudo");
+            
+            div_fechar.appendChild(btn_fechar);
+            containerModal.appendChild(modal);
+            modal.appendChild(div_fechar);
+            modal.appendChild(container_conteudo_modal);
+            container_conteudo_modal.appendChild(entrada_titulo);
+            container_conteudo_modal.appendChild(entrada_conteudo);
+            container_conteudo_modal.appendChild(div_botoes);
+            div_botoes.appendChild(btn_salvar);
+            div_botoes.appendChild(btn_cancelar);
+            elBody.appendChild(containerModal);
+            
+            btn_fechar.addEventListener("click", () => {fecharModal()});
+            btn_salvar.addEventListener("click", () => {salvarEventoCalendario();});
+            btn_cancelar.addEventListener("click", () => {fecharModal();});
+        }
+    }
+
+    //
+    function salvarEventoCalendario(){
+        console.log('Salvou o evento');
+    }
+
+
+    // Fecha o modal removendo o elemento do DOM
+    function fecharModal(){
+        const containerModal = document.querySelector(".container_modal_calendario_evento");
+
+        if(containerModal !== undefined || null){
+            containerModal.remove();
+        }
+    }
+
+    
+
     
     return (
         Object.keys(objC).length > 0 &&
-        <Tabela>
+        <Tabela $t={tamanho}>
             <thead>
                 <tr>
                     <th colSpan={7}>
-                        <div style={{position: "relative", display: "flex", justifyContent: "center"}}>
-                            <button className="btnL" onClick={() => {trocarMes("retroceder")}}>{"<<"}</button>
+                        <div style={{position: "relative", display: "flex", justifyContent: "center", paddingBottom: "15px"}}>
+                            <button className="btnL" onClick={() => {trocarMes("retroceder")}}><SlArrowLeftCircle /></button>
                             {`${nomesMesesPT[Number(mesMudar)-1]} - ${anoS}`}
-                            <button className="btnR" onClick={() => {trocarMes("avancar")}}>{">>"}</button>
+                            <button className="btnR" onClick={() => {trocarMes("avancar")}}><SlArrowRightCircle /></button>
                         </div>
                     </th>
                 </tr>
@@ -180,19 +255,25 @@ export default function Calendario(){
                                     criaArray(7).map((ds, dsi) => {
                                         let m = Number(mesMudar);
                                         let da = objC[m][`td_${anoS}_${mesMudar}_l${si+1}_${diasSemanaPT[dsi]}`]?.data == dataAtual.replaceAll("_", "/");
-                                        let dc = objC[m][`td_${anoS}_${mesMudar}_l${si+1}_${diasSemanaPT[dsi]}`]?.dataUS?.replaceAll("-", "_");
-                                        let dcdf = objF[dc]?.date?.replaceAll("-", "_");
+                                        let dc = objC[m][`td_${anoS}_${mesMudar}_l${si+1}_${diasSemanaPT[dsi]}`]?.dataUS?.replaceAll("-", "_"); // data OU undefined
+                                        let dcdf = objF[dc]?.date?.replaceAll("-", "_"); // data do feriado OU undefined
                                         let df = eFeriado(dc, dcdf);
+                                        let dm = objC[m][`td_${anoS}_${mesMudar}_l${si+1}_${diasSemanaPT[dsi]}`]?.nDiaMes; // dia do mês OU undefined
+                                        
 
                                         return (
-                                            <td key={`td_${dsi}_${diasSemanaPT[dsi]}`} id={`${diasSemanaPT[dsi]}_${mesMudar}_l${si+1}`}>
-                                                <div className={da ? `corAtual` : ``} style={{position: "relative"}}>
+                                            <td key={`td_${dsi}_${diasSemanaPT[dsi]}`} id={`${diasSemanaPT[dsi]}_${mesMudar}_l${si+1}`}
+                                            data-datadia={dc} onClick={(elemento) => {criarModal(elemento, dc);}}>
+                                                <div className={da ? `corAtual` : ``} name={`${dm !== undefined && `${dc}`}`} 
+                                                style={{position: "relative", cursor: "pointer"}}>
+                                                    { dm !== undefined && dm }
+                                                    
                                                     {
-                                                        objC[m][`td_${anoS}_${mesMudar}_l${si+1}_${diasSemanaPT[dsi]}`]?.nDiaMes
+                                                        df &&
+                                                            <svg width="13" height="13" style={{position: "absolute", right: "2px", bottom: "2px"}}>
+                                                                <circle cx="6" cy="6" r="5" style={{display: df?"block":"none"}} stroke="#fff" fill="#ee4747" strokeWidth={2}/>
+                                                            </svg>
                                                     }
-                                                    <svg width="10" height="10" style={{position: "absolute", right: "2px", bottom: "2px"}}>
-                                                        <circle cx="5" cy="5" r="4" style={{display: df?"block":"none"}} fill="#ee4747" />
-                                                    </svg>
                                                 </div>
                                             </td>
                                         )

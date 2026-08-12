@@ -5,6 +5,7 @@ import { ContextoG } from "../../context/contextoGobal";
 import Home from "../home/home";
 import Laboratorio from "../laboratorio/laboratorio";
 import Nota from "../nota/nota";
+import PaginaCalendario from "../paginacalendario/paginacalendario";
 
 
 
@@ -22,8 +23,10 @@ export default function Fixa(){
                         <Home />
                     :componenteAgora == "nota"?
                         <Nota />    
-                    :componenteAgora == "laboratorio" &&
+                    :componenteAgora == "laboratorio"?
                         <Laboratorio />    
+                    :componenteAgora == "calendario" &&
+                        <PaginaCalendario />    
                         
                 }              
             </SubContainerGeral>
