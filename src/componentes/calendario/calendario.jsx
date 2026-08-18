@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { criaArray, diasSemanaPT, nomesMesesPT } from "../utils/utilidades";
 import { Tabela } from "./estiloCalendario";
 import axios from "axios";
 import { MenssagemModal } from "../notificacaoMsg/notificacaoMsg";
 import { SlArrowLeftCircle, SlArrowRightCircle } from "react-icons/sl";
+import { ContextoG } from "../../context/contextoGobal";
+import {spinner} from "../spinner/spinner";
 
 
 export default function Calendario({tamanho = "none"}){
@@ -14,20 +16,21 @@ export default function Calendario({tamanho = "none"}){
     const [objF, setObjF] = useState({});
     const dataAtual = new Date().toLocaleDateString().replaceAll("/", "_");
     const [mesMudar, setMesMudar] = useState(`${dataAtual.split("_")[1]}`);
-    const [objEventosC, setObjEventosC] = useState({});
+    const {objEventosCalendario, setObjEventosCalendario} = useContext(ContextoG);
+    const [carrega, setCarrega] = useState(false);
 
     let contadorRender = 0;
     
     useEffect(() => {
-        contadorRender == 0 && tabelasMeses()
-        contadorRender = 1
+        contadorRender == 0 && tabelasMeses();
+        contadorRender = 1;
     }, [])
-
 
     // Cria um objeto com o número dos meses e dentro de cada mês, 
     // cria objetos com os datas do dia 01 até o último dia do mês em questão
     async function tabelasMeses(ano = null){
 
+        spinner(true);
     
         let totalDiasAno = 0;
         
@@ -90,12 +93,24 @@ export default function Calendario({tamanho = "none"}){
 
         setObjC(objGM);
         setArrSemanas(arrTotalSemanas);
+
+        spinner(false);
     }
 
     // Compara datas e retorn true se a data for feriado
     function eFeriado(data1, data2){
         
         if(data1 !== undefined && data2 !== undefined){
+            return true
+        }
+        
+        return false
+    }
+
+    //
+    function eEvento(data){
+        
+        if(data !== undefined){
             return true
         }
         
@@ -119,6 +134,29 @@ export default function Calendario({tamanho = "none"}){
         }
 
         return listaF;
+    }
+
+    function listaEventos(mes, obe){
+        let listaE = [];
+
+        try{
+            if(obe !== undefined){
+                if(obe[`${mes}`] !== undefined){
+                    for(let i = 0; i< Object.keys(obe[`${mes}`]).length; i++){
+                        let data = Object.keys(obe[`${mes}`])[i];
+                        let obv = Object.values(obe[`${mes}`])[i];
+                        obv["data"] = data;
+
+                        listaE.push(obv);
+                    }
+                }
+            }
+        }catch(error){
+            console.log('error :>> ', error);
+        }
+
+
+        return listaE;
     }
 
     //
@@ -179,11 +217,16 @@ export default function Calendario({tamanho = "none"}){
             div_fechar.classList.add("fechar_modal_calendario");
             div_fechar.innerHTML = `Adicionar/atualizar eventos ${dc.split("_")[2]}/${dc.split("_")[1]}/${dc.split("_")[0]}`;
             entrada_titulo.setAttribute("placeholder", "Título");
+            entrada_titulo.setAttribute("id", `titulo_${dc}`);
             entrada_titulo.setAttribute("type", "text");
             entrada_conteudo.setAttribute("placeholder", "Descrição");
+            entrada_conteudo.setAttribute("id", `conteudo_${dc}`);
             div_botoes.classList.add("btns_modal");
             btn_salvar.innerHTML = `Salvar`;
             btn_cancelar.innerHTML = `Cancelar`;
+
+            entrada_titulo.classList.add("titulo_evento");
+            entrada_conteudo.classList.add("conteudo_evento");
             
             div_botoes.style.cssText = "widht: 100%; display: flex; justify-content: center; align-items: center; gap: 5px;";
             
@@ -208,7 +251,54 @@ export default function Calendario({tamanho = "none"}){
 
     //
     function salvarEventoCalendario(){
-        console.log('Salvou o evento');
+        const containerModal = document.querySelector(".container_modal_calendario_evento");
+        const titulo_evento = document.querySelector(".titulo_evento");
+        const conteudo_evento = document.querySelector(".conteudo_evento");
+
+        let objE = {}; // engloba ano, mês e o evanto do dia
+        let objD = {}; // evento do dia
+        let objM = {}; // engloba mês e o evento do dia
+        
+        if(containerModal !== undefined || null){
+            const chave = `${titulo_evento?.id?.split("_")[1]}_${titulo_evento?.id?.split("_")[2]}_${titulo_evento?.id?.split("_")[3]}`;
+            objD[`${chave}`] = {titulo: titulo_evento?.value, conteudo: conteudo_evento?.value, cor: "#176ed2"}
+            objM[`${titulo_evento?.id?.split("_")[2]}`] = objD;
+            objE = objEventosCalendario;
+
+            if(Object.keys(objEventosCalendario).length == 0 ){
+                objE[`${anoS}`] = objM;
+                setObjEventosCalendario(objE);
+                MenssagemModal("verde", "SUCESSO", "Salvo com sucesso", 4000);
+            }else {
+                
+                
+                if(objE[`${anoS}`] !== undefined){
+                    if(Object.keys(objE[`${anoS}`]).length > 0){
+                        if(objE[`${anoS}`][`${titulo_evento.id.split("_")[2]}`] === undefined){
+                            objE[`${anoS}`][`${titulo_evento.id.split("_")[2]}`] = objD; 
+                        }else {
+                            if(Object.keys(objE[`${anoS}`][`${titulo_evento.id.split("_")[2]}`]).length > 0){
+                                objE[`${anoS}`][`${titulo_evento.id.split("_")[2]}`][`${chave}`] = {titulo: titulo_evento.value, conteudo: conteudo_evento.value, cor: "#176ed2"};
+                            }
+                            setObjEventosCalendario(objE);
+                            MenssagemModal("verde", "SUCESSO", "Salvo com sucesso", 4000);
+                        }
+                    }
+
+                }else {
+                    objE[`${anoS}`] = objM;
+                    setObjEventosCalendario(objE);
+                    MenssagemModal("verde", "SUCESSO", "Salvo com sucesso", 4000);
+                }
+
+            }
+
+            localStorage.setItem("dvrf-dados-eventos-calendario", JSON.stringify(objE));
+
+            containerModal.remove();
+            setCarrega(!carrega);
+        }
+
     }
 
 
@@ -222,83 +312,136 @@ export default function Calendario({tamanho = "none"}){
     }
 
     
+      
 
     
     return (
         Object.keys(objC).length > 0 &&
-        <Tabela $t={tamanho}>
-            <thead>
-                <tr>
-                    <th colSpan={7}>
-                        <div style={{position: "relative", display: "flex", justifyContent: "center", paddingBottom: "15px"}}>
-                            <button className="btnL" onClick={() => {trocarMes("retroceder")}}><SlArrowLeftCircle /></button>
-                            {`${nomesMesesPT[Number(mesMudar)-1]} - ${anoS}`}
-                            <button className="btnR" onClick={() => {trocarMes("avancar")}}><SlArrowRightCircle /></button>
-                        </div>
-                    </th>
-                </tr>
-                <tr>
+        <>
+            <Tabela $t={tamanho}>
+                <thead>
+                    <tr>
+                        <th colSpan={7}>
+                            <div style={{position: "relative", display: "flex", justifyContent: "center", paddingBottom: "15px"}}>
+                                <button className="btnL" onClick={() => {trocarMes("retroceder")}}><SlArrowLeftCircle /></button>
+                                {`${nomesMesesPT[Number(mesMudar)-1]} - ${anoS}`}
+                                <button className="btnR" onClick={() => {trocarMes("avancar")}}><SlArrowRightCircle /></button>
+                            </div>
+                        </th>
+                    </tr>
+                    <tr>
+                        {
+                            ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map((el, i) => {
+                                return <th key={`dth${i}`}>{el}</th> 
+                            })
+                        }
+                    </tr>
+                </thead>
+
+                <tbody className="tbody_atual">
                     {
-                        ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map((el, i) => {
-                            return <th key={`dth${i}`}>{el}</th> 
+                        criaArray(arrSemanas[Number(mesMudar)-1]).map((s, si) => {
+                            return (
+                                <tr key={`trb_${si}`}>
+                                    {
+                                        criaArray(7).map((ds, dsi) => {
+                                            let m = Number(mesMudar);
+                                            let da = objC[m][`td_${anoS}_${mesMudar}_l${si+1}_${diasSemanaPT[dsi]}`]?.data == dataAtual.replaceAll("_", "/");
+                                            let dc = objC[m][`td_${anoS}_${mesMudar}_l${si+1}_${diasSemanaPT[dsi]}`]?.dataUS?.replaceAll("-", "_"); // data OU undefined
+                                            let dcdf = objF[dc]?.date?.replaceAll("-", "_"); // data do feriado OU undefined
+                                            let df = eFeriado(dc, dcdf);
+                                            let dm = objC[m][`td_${anoS}_${mesMudar}_l${si+1}_${diasSemanaPT[dsi]}`]?.nDiaMes; // dia do mês OU undefined
+                                            let dcde = undefined;
+                                            
+                                            if(objEventosCalendario[`${anoS}`] !== undefined){
+                                                if(objEventosCalendario[`${anoS}`][`${mesMudar}`] !== undefined){
+                                                    dcde = objEventosCalendario[`${anoS}`][`${mesMudar}`][`${dc}`];
+                                                }
+                                            }
+                                            
+                                            let de = eEvento(dcde);
+
+                                            return (
+                                                <td key={`td_${dsi}_${diasSemanaPT[dsi]}`} id={`${diasSemanaPT[dsi]}_${mesMudar}_l${si+1}`}
+                                                data-datadia={dc} onClick={(elemento) => {criarModal(elemento, dc);}}>
+                                                    <div className={da ? `corAtual` : ``} name={`${dm !== undefined && `${dc}`}`} 
+                                                    style={{position: "relative", cursor: "pointer"}}>
+                                                        { dm !== undefined && dm }
+                                                        
+                                                        {
+                                                            df &&
+                                                                <svg width="13" height="13" style={{position: "absolute", right: "2px", bottom: "2px"}}>
+                                                                    <circle cx="6" cy="6" r="5" style={{display: df?"block":"none"}} stroke="#fff" fill="#ee4747" strokeWidth={2}/>
+                                                                </svg>
+                                                        }
+                                                        {
+                                                            de &&
+                                                                <svg width="13" height="13" style={{position: "absolute", right: "2px", bottom: "2px"}}>
+                                                                    <circle cx="6" cy="6" r="5" style={{display: de?"block":"none"}} stroke="#fff" fill="#176ed2" strokeWidth={2}/>
+                                                                </svg>
+                                                        }
+                                                    </div>
+                                                </td>
+                                            )
+                                        })
+                                    }
+                                </tr>
+                            )
                         })
                     }
-                </tr>
-            </thead>
+                </tbody>
+            </Tabela>
 
-            <tbody className="tbody_atual">
-                {
-                    criaArray(arrSemanas[Number(mesMudar)-1]).map((s, si) => {
-                        return (
-                            <tr key={`trb_${si}`}>
-                                {
-                                    criaArray(7).map((ds, dsi) => {
-                                        let m = Number(mesMudar);
-                                        let da = objC[m][`td_${anoS}_${mesMudar}_l${si+1}_${diasSemanaPT[dsi]}`]?.data == dataAtual.replaceAll("_", "/");
-                                        let dc = objC[m][`td_${anoS}_${mesMudar}_l${si+1}_${diasSemanaPT[dsi]}`]?.dataUS?.replaceAll("-", "_"); // data OU undefined
-                                        let dcdf = objF[dc]?.date?.replaceAll("-", "_"); // data do feriado OU undefined
-                                        let df = eFeriado(dc, dcdf);
-                                        let dm = objC[m][`td_${anoS}_${mesMudar}_l${si+1}_${diasSemanaPT[dsi]}`]?.nDiaMes; // dia do mês OU undefined
-                                        
+            {
+                (objEventosCalendario[`${anoS}`] !== undefined || listaFeriados(mesMudar, objF).length > 0) &&
+                (listaEventos(mesMudar, objEventosCalendario[`${anoS}`]).length > 0 || listaFeriados(mesMudar, objF).length > 0) &&
+                <Tabela $t={tamanho} style={{height: 'auto', marginTop: '10px'}}>
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Data</th>
+                            <th>Evento</th>
+                            <th>Descrição</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            listaFeriados(mesMudar, objF).map((el, eli) => {
+                                let [ano, mes, dia] = el?.date?.split("-");
+                                
+                                return (
+                                    <tr key={`feriados_${eli}`}>
+                                        <td>Feriado</td>
+                                        <td>{`${dia}/${mes}/${ano}`}</td>
+                                        <td>{el?.name}</td>
+                                        <td>Feriado {el?.type?.replace("national", "nacional")}</td>
+                                    </tr>
+                                )
+                            })
+                        }
+                        {
+                            listaEventos(mesMudar, objEventosCalendario[`${anoS}`]).map((el, eli) => {
+                                let [ano, mes, dia] = el?.data?.split("_");
+                                let ob = objEventosCalendario[`${anoS}`][`${mesMudar}`][`${el?.data}`];
 
-                                        return (
-                                            <td key={`td_${dsi}_${diasSemanaPT[dsi]}`} id={`${diasSemanaPT[dsi]}_${mesMudar}_l${si+1}`}
-                                            data-datadia={dc} onClick={(elemento) => {criarModal(elemento, dc);}}>
-                                                <div className={da ? `corAtual` : ``} name={`${dm !== undefined && `${dc}`}`} 
-                                                style={{position: "relative", cursor: "pointer"}}>
-                                                    { dm !== undefined && dm }
-                                                    
-                                                    {
-                                                        df &&
-                                                            <svg width="13" height="13" style={{position: "absolute", right: "2px", bottom: "2px"}}>
-                                                                <circle cx="6" cy="6" r="5" style={{display: df?"block":"none"}} stroke="#fff" fill="#ee4747" strokeWidth={2}/>
-                                                            </svg>
-                                                    }
-                                                </div>
-                                            </td>
-                                        )
-                                    })
-                                }
-                            </tr>
-                        )
-                    })
-                }
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colSpan={7}>
-                        <div>
-                            {
-                                listaFeriados(mesMudar, objF).map((el, eli) => {
-                                    let [ano, mes, dia] = el?.date?.split("-");
-                                    return <div key={`feri_${eli}`}> {dia}/{mes}/{ano} - {el?.name} </div>
-                                })
-                            }
-                        </div>
-                    </td>
-                </tr>
-            </tfoot>
-        </Tabela>
+                                return (
+                                    <tr key={`eventos_${eli}`}>
+                                        <td>Evento</td>
+                                        <td>{`${dia}/${mes}/${ano}`}</td>
+                                        <td>{ob?.titulo}</td>
+                                        <td>{ob?.conteudo}</td>
+                                    </tr>
+                                )
+                            })
+                        }
+
+                    </tbody>
+                </Tabela>
+                
+                
+            }
+        </>
+
+
     )
 }
-

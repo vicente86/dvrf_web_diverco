@@ -106,6 +106,14 @@ button:hover {
   transition:all 0.3s ease-in-out;
 }
 
+.btn_apagar {
+  background-color: goldenrod;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 /* ======================== Modal calendário ============================== */
 .container_modal_calendario_evento {
   display: flex;
@@ -186,12 +194,14 @@ button:hover {
     border-radius: 5px;
   }
   .btn_salvar_modal_calendario {
+    margin-top: 10px;
     background-color: green;
     color: #fff;
     font-weight: 600;
   }
-
+  
   .btn_cancelar_modal_calendario {
+    margin-top: 10px;
     background-color: red;
     color: #fff;
     font-weight: 600;

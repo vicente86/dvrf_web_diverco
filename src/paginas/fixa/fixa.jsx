@@ -6,6 +6,7 @@ import Home from "../home/home";
 import Laboratorio from "../laboratorio/laboratorio";
 import Nota from "../nota/nota";
 import PaginaCalendario from "../paginacalendario/paginacalendario";
+import Lixeira from "../lixeira/lixeira";
 
 
 
@@ -25,8 +26,10 @@ export default function Fixa(){
                         <Nota />    
                     :componenteAgora == "laboratorio"?
                         <Laboratorio />    
-                    :componenteAgora == "calendario" &&
+                    :componenteAgora == "calendario" ?
                         <PaginaCalendario />    
+                    :componenteAgora == "lixeira" &&
+                        <Lixeira />    
                         
                 }              
             </SubContainerGeral>
