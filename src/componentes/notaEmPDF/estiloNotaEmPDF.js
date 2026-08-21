@@ -49,6 +49,16 @@ export const ElementoRascunho = styled.div`
         display:flex;
         justify-content: center;
         gap: 5px;
+        flex-wrap: wrap;
+    }
+    .btn_gerar_pdf {
+        width: 335px;
+    }
+
+    @media only screen and (max-width: 400px){
+        .btn_gerar_pdf {
+            width: auto;
+        }
     }
 
 `

@@ -1,17 +1,19 @@
-import { ContainerIcones, ContainerMenu } from "./estiloMenuLateral";
+import { useContext } from "react";
+import { ContextoG } from "../../context/contextoGobal";
+import { ContainerIcones, ContainerMenu} from "./estiloMenuLateral";
 import { ImHome } from "react-icons/im";
 import { LuNotebookPen } from "react-icons/lu";
 import { AiFillExperiment } from "react-icons/ai";
 import { IoCalendarOutline } from "react-icons/io5";
 import { BsTrash3Fill } from "react-icons/bs";
-import { ContextoG } from "../../context/contextoGobal";
-import { useContext } from "react";
+
 
 
 export default function MenuLateral(){
 
     const {setComponenteAgora, componenteAgora} = useContext(ContextoG);
 
+    
     return (
         <ContainerMenu>
             <ContainerIcones className={componenteAgora == "home"? "corativa":"corneutra"} onClick={() => {setComponenteAgora("home")}}>
@@ -29,8 +31,7 @@ export default function MenuLateral(){
             <ContainerIcones className={componenteAgora == "lixeira"? "corativa":"corneutra"} onClick={() => {setComponenteAgora("lixeira")}}>
                 <BsTrash3Fill color="#000" size={20}/>
             </ContainerIcones>
-    
-
+            
         </ContainerMenu>
     )
 }

@@ -1,5 +1,5 @@
 import { useContext} from "react";
-import { Sessao, Titulo1 } from "../../assets/estiloGeral";
+import { Titulo1, Sessao } from "../../assets/estiloGeral";
 import { ContextoG } from "../../context/contextoGobal";
 import { MenssagemModal } from "../../componentes/notificacaoMsg/notificacaoMsg";
 

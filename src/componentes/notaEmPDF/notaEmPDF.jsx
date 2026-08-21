@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ContainerNotaEmPDF, ElementoPDF, ElementoRascunho } from "./estiloNotaEmPDF";
 import html2pdf from "html2pdf.js";
+import { Titulo2 } from "../../assets/estiloGeral";
 
 export default function NotaEmPDF(){
     const [tempdf, setTemPdf] = useState(false);
@@ -79,7 +80,7 @@ export default function NotaEmPDF(){
         <ContainerNotaEmPDF>
 
             <ElementoRascunho>
-                <h2 className="dtitulo">Monte sua nota</h2>
+                <Titulo2>Monte sua nota</Titulo2>
                 <div className="dflex">
                     <button onClick={() => {montarNota("titulo")}}>Título +</button>
                     <button onClick={() => {montarNota("lista")}}>Lista +</button>
@@ -89,7 +90,7 @@ export default function NotaEmPDF(){
                 {
                     tempdf &&
                         <div className="dflex" style={{margin: "5px"}}>
-                            <button style={{width: "335px"}} onClick={() => {criarPdf()}}>Gerar pdf</button>
+                            <button className="btn_gerar_pdf" onClick={() => {criarPdf()}}>Gerar pdf</button>
                         </div>
                 }
                 

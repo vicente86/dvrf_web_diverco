@@ -34,6 +34,10 @@
   font-family: PlaywriteAUTAS-Regular;
   src: url(assets/fontes/PlaywriteAUTAS-Regular.ttf);
 }
+@font-face {
+  font-family: ProtestRevolution-Regular;
+  src: url(assets/fontes/ProtestRevolution-Regular.ttf);
+}
 
 
 @media (prefers-color-scheme: dark) {

@@ -1,10 +1,8 @@
-import { Sessao, Titulo1} from "../../assets/estiloGeral"
-
-
+import {Titulo1, Sessao} from "../../assets/estiloGeral"
 
 export default function Laboratorio(){
 
-
+    
 
     return (
         <Sessao>

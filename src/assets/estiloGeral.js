@@ -35,6 +35,13 @@ export const Sessao = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    @media only screen and (max-width: 400px){
+        padding: 32px 10px 10px 10px;
+        margin-left: 0px;
+        p {
+            text-align: justify;
+        }
+    }
 `;
 
 export const DivFlexRow = styled.div`
@@ -59,31 +66,31 @@ export const DivGrid = styled.div`
 
 // Títulos
 export const Titulo1 = styled.h1`    
-    font-size: 22pt;
+    font-size: 26pt;
     padding: 10px 0px;
     text-align: center;
     letter-spacing: 0.05cm;
-    font-family: PlaywriteAUTAS-Regular;
+    font-family: ProtestRevolution-Regular;
 `;
 export const Titulo2 = styled.h1`    
     font-size: 20pt;
     padding: 10px 0px;
     text-align: center;
     letter-spacing: 0.05cm;
-    font-family: PlaywriteAUTAS-Regular;
+    font-family: ProtestRevolution-Regular;
 `;
 export const Titulo3 = styled.h1`    
     font-size: 18pt;
     padding: 10px 0px;
     text-align: center;
     letter-spacing: 0.05cm;
-    font-family: PlaywriteAUTAS-Regular;
+    font-family: ProtestRevolution-Regular;
 `;
 export const Titulo4 = styled.h1`    
     font-size: 16pt;
     padding: 10px 0px;
     text-align: center;
     letter-spacing: 0.05cm;
-    font-family: PlaywriteAUTAS-Regular;
+    font-family: ProtestRevolution-Regular;
 `;
 // ===================================================
