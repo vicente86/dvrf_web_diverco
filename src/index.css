@@ -138,6 +138,9 @@ button:hover {
   background-color: #cecece; 
   color: #000; 
   border-radius: 10px;
+  .btns_modal {
+    margin: 10px;
+  }
 }
 
 .fechar_modal_calendario{
@@ -210,6 +213,30 @@ button:hover {
     color: #fff;
     font-weight: 600;
   }
+}
+
+@media only screen and (max-width: 420px){
+  .titulo_div_fechar {padding-top: 30px;}
+  .titulo_evento {
+    margin-top: 35px;
+    width: 98%;
+  }
+  .conteudo_evento {
+    margin-top: 35x;
+    width: 98%;
+  }
+
+}
+
+@media only screen and (max-width: 560px){
+  .modal_calendario_evento {
+    width: 100%;
+    
+    textarea {
+      width: 90%;
+    }
+  }
+
 }
 
 /* ============================================================= */

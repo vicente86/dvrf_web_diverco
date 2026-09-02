@@ -20,10 +20,37 @@ export const ContainerMenu = styled.div`
         width: 100%;
         height: 30px;
         flex-direction: row;
-        justify-content: center;
+        justify-content: left;
         overflow-x: auto;
         div:nth-child(1n){margin-right: 10px;}
     }
+`;
+
+export const ContainerIconesM = styled.div`
+    background-color: #cecece;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    box-shadow: -2px 2px 5px #000;
+    margin-bottom: 10px;
+    transition: all 0.5s ease-in-out;
+    position: relative;
+    z-index: 11;
+
+    .checkinputmenu {
+        visibility: visible;
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        width: 50%;
+        height: 50%;
+        z-index: 10;
+        opacity: 0;
+    }
+    
 `;
 
 export const ContainerIcones = styled.div`
@@ -37,4 +64,6 @@ export const ContainerIcones = styled.div`
     box-shadow: -2px 2px 5px #000;
     margin-bottom: 10px;
     transition: all 0.5s ease-in-out;
+    position: relative;
+    transform: ${window.screen.width <= 400? `translateY(-50px)`:`translateX(-50px)`};
 `;

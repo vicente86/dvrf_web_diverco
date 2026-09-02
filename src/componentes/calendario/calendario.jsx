@@ -202,6 +202,7 @@ export default function Calendario({tamanho = "none"}){
             const div_botoes = document.createElement("div");
             const btn_salvar = document.createElement("button");
             const btn_cancelar = document.createElement("button");
+            const titulo_div_fechar = document.createElement("p");
             
         
             btn_salvar.classList.add("btn_salvar_modal_calendario");
@@ -215,7 +216,10 @@ export default function Calendario({tamanho = "none"}){
             btn_fechar.innerHTML = "&#10007;";
             containerModal.classList.add("container_modal_calendario_evento");
             div_fechar.classList.add("fechar_modal_calendario");
-            div_fechar.innerHTML = `Adicionar/atualizar eventos ${dc.split("_")[2]}/${dc.split("_")[1]}/${dc.split("_")[0]}`;
+            
+
+            titulo_div_fechar.innerHTML = `Adicionar/atualizar eventos ${dc.split("_")[2]}/${dc.split("_")[1]}/${dc.split("_")[0]}`;
+            div_fechar.appendChild(titulo_div_fechar);
             entrada_titulo.setAttribute("placeholder", "Título");
             entrada_titulo.setAttribute("id", `titulo_${dc}`);
             entrada_titulo.setAttribute("type", "text");
@@ -227,6 +231,7 @@ export default function Calendario({tamanho = "none"}){
 
             entrada_titulo.classList.add("titulo_evento");
             entrada_conteudo.classList.add("conteudo_evento");
+            titulo_div_fechar.classList.add("titulo_div_fechar");
             
             div_botoes.style.cssText = "widht: 100%; display: flex; justify-content: center; align-items: center; gap: 5px;";
             
