@@ -1,27 +1,8 @@
-import { useEffect } from "react";
 import { Sessao, Titulo1, Titulo2 } from "../../assets/estiloGeral";
-import { spinner } from "../../componentes/spinner2/spinner";
 
 export default function Home(){
 
-    useEffect(() => {
-        let minhaAnima;
-        let cont = 0;
-        spinner(true);
-        
-        const animando = () => {
-            minhaAnima = requestAnimationFrame(animando);
-            if(cont == 1000){
-                cancelAnimationFrame(minhaAnima);
-                spinner(false);
-            }
-            cont ++;
-        }
-        minhaAnima = requestAnimationFrame(animando);
-        
-    }, [])
-
-
+    
     return (
         <Sessao>
             <Titulo1>Início</Titulo1>
