@@ -30,8 +30,8 @@ export const SubContainerGeral = styled.div`
 export const Sessao = styled.div`
     position: relative;
     padding: 5px;
-    width: 100%;
-    margin-left: 61px;
+    width: 98%;
+    margin: auto;
     display: flex;
     flex-direction: column;
     align-items: center;

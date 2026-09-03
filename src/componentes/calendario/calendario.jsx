@@ -5,7 +5,7 @@ import axios from "axios";
 import { MenssagemModal } from "../notificacaoMsg/notificacaoMsg";
 import { SlArrowLeftCircle, SlArrowRightCircle } from "react-icons/sl";
 import { ContextoG } from "../../context/contextoGobal";
-import {spinner} from "../spinner/spinner";
+import {spinner} from "../spinner2/spinner";
 
 
 export default function Calendario({tamanho = "none"}){
