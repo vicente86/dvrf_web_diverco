@@ -1,9 +1,14 @@
-import { useContext} from "react";
+import { useContext, useEffect} from "react";
 import { Titulo1, Sessao } from "../../assets/estiloGeral";
 import { ContextoG } from "../../context/contextoGobal";
 import { MenssagemModal } from "../../componentes/notificacaoMsg/notificacaoMsg";
+import { transicaoPag } from "../../componentes/transicaoPaginas/transicaoPag";
 
 export default function Lixeira(){
+
+    useEffect(() => {
+        transicaoPag()
+    }, [])
 
     const {setObjEventosCalendario} = useContext(ContextoG);
 
